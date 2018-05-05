@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Mobile Sale Data</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"	 crossorigin="anonymous">
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	<script src="https://code.highcharts.com/highcharts.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/4.13.0/firebase.js"></script>
+	<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+	<style>
+		* {
+			font-family: 'Lato', sans-serif;
+		}
+	</style>
+</head>
+
+<body>
+	<nav class="navbar navbar-dark bg-primary">
+		<div class="container">
+			<span class="navbar-brand mb-0 h1">
+				<i class="fa fa-tachometer"></i>
+			</span>
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item active">
+					<a class="nav-link" href="#">View Mobile Sale Data</a>
+				</li>
+			</ul>
+		</div>
+	</nav>
+
+	<div class="container mt-5">
+		<div class="row mb-4 justify-content-end">
+			<div class="col-sm-2">
+				<select class="form-control form-control-sm " id="selPivotEntity">
+					<option value="company">Company Name</option>
+					<option value="device">Device Name</option>
+					<option value="dateOfSale">Date Of Sale</option>
+					<option value="price">Price</option>
+					<option value="quantity">Quantity</option>
+				</select>
+			</div>
+			<div class="col-sm-2">
+				<button class="btn btn-success btn-sm btn-block" data-toggle="modal" data-target="#addMobileData"><i class="fa fa-plus"></i> Add Phone</button>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<div class="card">
+					<div class="card-body">
+						<h4 class="card-title">Bar Chart</h4>
+						<div id="barChart"></div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="card">
+					<div class="card-body">
+						<h4 class="card-title">Pie Chart</h4>
+						<div id="pieChart"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="modal fade" id="addMobileData" tabindex="-1" role="dialog" aria-labelledby="addMobileDataLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="addMobileDataLabel">Add Phone Data</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<form id="mobileDataForm">
+							<div class="row">
+								<div class="col-sm">
+									<select id="selCompany" name="selCompany" class="form-control form-control-sm">
+										<option value="">Company Name*</option>
+										<option value="Samsung">Samsung</option>
+										<option value="Xiaomi">Xiaomi</option>
+										<option value="Nokia">Nokia</option>
+										<option value="Lenovo">Lenovo</option>
+										<option value="Asus">Asus</option>
+										<option value="Apple">Apple</option>
+										<option value="OnePlus">OnePlus</option>
+										<option value="Lava">Lava</option>
+									</select>
+								</div>
+								<div class="col-sm">
+									<select id="selDevice" name="selDevice" class="form-control form-control-sm">
+										<option value="">Device Name*</option>
+										<option value="Xiaomi Redmi Note 5 Pro">Xiaomi Redmi Note 5 Pro</option>
+										<option value="Xiaomi Redmi Note 4">Xiaomi Redmi Note 4</option>
+										<option value="Vivo V7 Plus">Vivo V7 Plus</option>
+										<option value="Lenovo K8 Note">Lenovo K8 Note</option>
+										<option value="Xiaomi Redmi Note 5 Pro">Xiaomi Redmi Note 5 Pro</option>
+										<option value="Vivo V9">Vivo V9</option>
+										<option value="Samsung Galaxy J7 Prime">Samsung Galaxy J7 Prime</option>
+										<option value="Oppo F7">Oppo F7</option>
+										<option value="Samsung Galaxy J7 Max">Samsung Galaxy J7 Max</option>
+										<option value="Samsung Galaxy J2 Pro">Samsung Galaxy J2 Pro</option>
+										<option value="Xiaomi Redmi Y1">Xiaomi Redmi Y1</option>
+										<option value="Samsung Galaxy A5">Samsung Galaxy A5</option>
+										<option value="Oppo A37">Oppo A37</option>
+										<option value="Xiaomi Redmi 5A">Xiaomi Redmi 5A</option>
+										<option value="Oppo A83">Oppo A83</option>
+										<option value="Xiaomi Redmi 5A">Xiaomi Redmi 5A</option>
+										<option value="Samsung Galaxy S9">Samsung Galaxy S9</option>
+										<option value="Samsung Galaxy A8+">Samsung Galaxy A8+</option>
+										<option value="Honor 9 Lite">Honor 9 Lite</option>
+										<option value="Xiaomi Mi A1">Xiaomi Mi A1</option>
+										<option value="Motorola Moto G5S Plus 64GB">Motorola Moto G5S Plus 64GB</option>
+										<option value="Lenovo K6 Note 4GB">Lenovo K6 Note 4GB</option>
+										<option value="Tecno Camon i">Tecno Camon i</option>
+										<option value="Oppo F5">Oppo F5</option>
+										<option value="Nokia 6">Nokia 6</option>
+										<option value="Samsung Galaxy A7">Samsung Galaxy A7</option>
+										<option value="Samsung Galaxy On Nxt 64GB">Samsung Galaxy On Nxt 64GB</option>
+										<option value="Honor 7X">Honor 7X</option>
+										<option value="Samsung Galaxy On7 Pro">Samsung Galaxy On7 Pro</option>
+										<option value="Apple iPhone X 256GB">Apple iPhone X 256GB</option>
+										<option value="Nokia 8">Nokia 8</option>
+										<option value="Samsung Galaxy On7 Prime">Samsung Galaxy On7 Prime</option>
+										<option value="Samsung Galaxy A5">Samsung Galaxy A5</option>
+										<option value="Samsung Galaxy J7 Pro">Samsung Galaxy J7 Pro</option>
+										<option value="Nokia 6">Nokia 6</option>
+										<option value="Nokia 2">Nokia 2</option>
+										<option value="Vivo V7">Vivo V7</option>
+										<option value="Samsung Galaxy J7 Prime 2">Samsung Galaxy J7 Prime 2</option>
+										<option value="Motorola Moto M">Motorola Moto M</option>
+										<option value="Honor 9 Lite">Honor 9 Lite</option>
+									</select>
+								</div>
+							</div>
+							<div class="row mt-2">
+								<div class="col-sm">
+									<input id="txtDateOfSale" name="txtDateOfSale" class="form-control form-control-sm" type="date" placeholder="Date Of Sale*">
+								</div>
+								<div class="col-sm">
+									<input id="txtPrice" name="txtPrice" class="form-control form-control-sm" type="number" placeholder="Price*">
+								</div>
+								<div class="col-sm">
+									<input id="txtQuantity" name="txtQuantity" class="form-control form-control-sm" type="number" placeholder="Quantity*">
+								</div>
+							</div>
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-primary" id="saveMobileData">Add Data</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script src="scripts/config.js" type="text/javascript"></script>
+		<script src="scripts/main.js" type="text/javascript"></script>
+	</body>
+</html>
